@@ -1,0 +1,12 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: class
+  config:
+    import:
+      - application-web.yml
+      - application-log.yml
+      - application-datasource.yml
+      - application-mybatisPlus.yml
+      - application-redis.yml
