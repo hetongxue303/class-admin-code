@@ -1,7 +1,9 @@
 package com.hetongxue;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 程序入口
@@ -9,6 +11,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author 何同学
  */
 @SpringBootApplication
+@EnableTransactionManagement
+@MapperScan("com.hetongxue.core.mapper")
 public class ClassApplication {
 
     public static void main(String[] args) {
