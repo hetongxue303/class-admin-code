@@ -19,7 +19,7 @@ public class JwtUtils {
     /**
      * 过期时间(单位：ms) 默认3天
      */
-    private static final long EXPIRATION_TIME = 3 * 86400;
+    private static final long EXPIRATION_TIME = 3 * 24 * 60 * 60;
     /**
      * 密钥
      */

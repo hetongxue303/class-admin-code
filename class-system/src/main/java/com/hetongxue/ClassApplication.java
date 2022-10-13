@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableTransactionManagement
-@MapperScan("com.hetongxue.core.mapper")
+@MapperScan("com.hetongxue.system.mapper")
 public class ClassApplication {
 
     public static void main(String[] args) {
