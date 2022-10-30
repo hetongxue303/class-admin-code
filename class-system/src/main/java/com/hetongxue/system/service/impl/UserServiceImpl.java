@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 用户业务实现
@@ -33,6 +34,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional(propagation = Propagation.SUPPORTS)
     public User selectOneByUserID(Long userId) {
         return userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserId, userId));
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public List<User> selectUserList(String key) {
+        List<Long> students = userMapper.getUsersId(key);
+        return userMapper.selectList((new LambdaQueryWrapper<User>().in(User::getUserId, students)));
     }
 
 }

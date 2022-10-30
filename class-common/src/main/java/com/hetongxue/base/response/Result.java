@@ -15,7 +15,6 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class Result implements Serializable {
 
-
     /**
      * 状态码
      */
