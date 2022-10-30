@@ -55,8 +55,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        System.out.println("经过JWT过滤器");
         // 2.解析token信息
-        Claims claims = jwtUtils.getClaims(token);
+        Claims claims = jwtUtils.parseToken(token);
         // 2.1 校验token是否就合法
         if (Objects.isNull(claims)) {
             throw new JwtAuthenticationException("token不合法");

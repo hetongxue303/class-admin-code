@@ -1,8 +1,6 @@
 package com.hetongxue.configuration.security.entity;
 
 import com.hetongxue.system.domain.User;
-import com.hetongxue.system.domain.vo.MenuVo;
-import com.hetongxue.system.domain.vo.RouterVo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,9 +23,6 @@ public class LoginUser implements UserDetails {
 
     private User user;
     private Collection<GrantedAuthority> authorities;
-//    private String[] roles;
-    private Collection<MenuVo> menus;
-    private Collection<RouterVo> routers;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

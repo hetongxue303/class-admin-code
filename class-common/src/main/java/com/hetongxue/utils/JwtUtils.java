@@ -29,12 +29,16 @@ public class JwtUtils {
      * 签名算法
      */
     private static final SignatureAlgorithm SIGNATUREALGORITHM = SignatureAlgorithm.HS512;
+    /**
+     * 前缀
+     */
+    private static final String TOKEN_PREFIX = "Bearer ";
 
     /**
      * 生成JWT
      */
     public String generateToken(Long userId, String username) {
-        return Jwts.builder()
+        return TOKEN_PREFIX+Jwts.builder()
                 // 设置头部参数
                 .setHeaderParam("typ", "JWT")
                 // 设置ID
@@ -52,19 +56,19 @@ public class JwtUtils {
     /**
      * 解析JWT
      */
-    public Claims getClaims(String token) {
+    public Claims parseToken(String token) {
         try {
-            return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
+            return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.substring(TOKEN_PREFIX.length(),token.length())).getBody();
         } catch (Exception e) {
             return null;
         }
     }
 
     /**
-     * 解析token
+     * 是否存在token
      */
-    public boolean parseToken(String token) {
-        return Objects.isNull(Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody());
+    public boolean isToken(String token) {
+        return Objects.isNull(Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.substring(TOKEN_PREFIX.length(),token.length())).getBody());
     }
 
     /**

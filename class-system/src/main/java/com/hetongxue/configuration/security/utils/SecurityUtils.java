@@ -2,8 +2,11 @@ package com.hetongxue.configuration.security.utils;
 
 import com.hetongxue.system.domain.Menu;
 import com.hetongxue.system.domain.Role;
+import com.hetongxue.system.domain.User;
 import com.hetongxue.system.domain.vo.MenuVo;
 import com.hetongxue.system.domain.vo.RouterVo;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
@@ -99,11 +102,38 @@ public class SecurityUtils {
      */
     public static String generateAuthority(List<Role> roles, List<Menu> menus) {
         // 获取角色代码列表
-        String role = Optional.ofNullable(roles).orElse(new ArrayList<Role>()).stream().filter(Objects::nonNull).map(item -> "ROLE_" + item.getRoleName()).collect(Collectors.joining(","));
+        String role = Optional.ofNullable(roles).orElse(new ArrayList<Role>()).stream().filter(Objects::nonNull).map(item -> "ROLE_" + item.getRoleKey()).collect(Collectors.joining(","));
         // 获取权限代码列表
         String permission = Optional.ofNullable(menus).orElse(new ArrayList<Menu>()).stream().filter(Objects::nonNull).map(Menu::getPerKey).filter(Objects::nonNull).collect(Collectors.joining(","));
         // 判断角色列表是否为空 为空则只返回权限代码 不为空则返回角色列表+权限代码列表
         return ObjectUtils.isEmpty(role) ? permission : role.concat(",").concat(permission);
     }
 
+    /**
+     * 生成权限key值
+     *
+     * @param menus 菜单列表
+     * @return java.lang.String - 权限列表
+     */
+    public static String generateAuthorityByKey(List<Menu> menus) {
+        return Optional.ofNullable(menus).orElse(new ArrayList<Menu>()).stream().filter(Objects::nonNull).map(Menu::getPerKey).filter(Objects::nonNull).collect(Collectors.joining(","));
+    }
+
+    /**
+     * 获取SecurityContextHolder
+     *
+     * @return org.springframework.security.core.Authentication
+     */
+    public static Authentication getSecurityContextHolder() {
+        return SecurityContextHolder.getContext().getAuthentication();
+    }
+
+    /**
+     * 虎丘用户信息
+     *
+     * @return com.hetongxue.system.domain.User
+     */
+    public static User getUser() {
+        return (User) getSecurityContextHolder().getPrincipal();
+    }
 }

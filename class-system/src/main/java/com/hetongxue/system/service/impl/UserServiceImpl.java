@@ -29,4 +29,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
     }
 
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public User selectOneByUserID(Long userId) {
+        return userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUserId, userId));
+    }
+
 }

@@ -12,13 +12,13 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 登录控制器
+ * 验证码控制器
  *
  * @author 何同学
  */
 @RestController
 @RequestMapping("/auth")
-public class LoginController {
+public class CaptchaController {
 
     /**
      * 存储时间

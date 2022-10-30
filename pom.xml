@@ -17,7 +17,6 @@
         <module>class-system</module>
         <module>class-common</module>
         <module>class-logging</module>
-        <module>class-framework</module>
     </modules>
 
     <properties>

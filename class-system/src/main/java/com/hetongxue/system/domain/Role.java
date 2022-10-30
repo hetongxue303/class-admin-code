@@ -35,10 +35,6 @@ public class Role implements Serializable {
      */
     private String roleKey;
     /**
-     * 显示顺序
-     */
-    private Integer roleSort;
-    /**
      * 帐号状态(0:正常 1:停用)
      */
     private boolean status;

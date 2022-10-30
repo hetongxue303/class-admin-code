@@ -7,7 +7,7 @@ package com.hetongxue.base.constant;
  */
 public class Base {
 
-    public static final String AUTHORIZATION_KEY = "authorization";
+    public static final String AUTHORIZATION_KEY = "Authorization";
     public static final String CAPTCHA_KEY = "captcha";
     public static final String CREATE_TIME_KEY = "createTime";
     public static final String UPDATE_TIME_KEY = "updateTime";
