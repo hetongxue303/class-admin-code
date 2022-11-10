@@ -11,14 +11,13 @@ import com.hetongxue.system.domain.vo.UserVo;
 import com.hetongxue.system.service.MenuService;
 import com.hetongxue.system.service.RoleService;
 import com.hetongxue.system.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
@@ -31,13 +30,13 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
+    @Resource
     private UserService userService;
-    @Autowired
+    @Resource
     private RoleService roleService;
-    @Autowired
+    @Resource
     private MenuService menuService;
-    @Autowired
+    @Resource
     private HttpServletResponse response;
 
     /**
@@ -48,17 +47,18 @@ public class UserController {
     @GetMapping("/getUserInfo")
     public Result getUserInfo() {
         // 获取用户信息
-        User user = userService.selectOneByUsername(SecurityUtils.getUser().getUsername());
+        Long accountId = SecurityUtils.getAccount().getAccountId();
+        User user = userService.selectOneByAccountID(accountId);
         if (!ObjectUtils.isEmpty(user)) {
 
             // 获取角色列表
-            List<Role> roleList = roleService.selectRoleByUserId(user.getUserId());
+            List<Role> roleList = roleService.selectRoleByAccountId(accountId);
             // 获取菜单列表
-            List<Menu> menuList = menuService.selectMenuByUserId(user.getUserId());
+            List<Menu> menuList = menuService.selectMenuListByAccountID(accountId);
             List<MenuVo> menus = SecurityUtils.generateMenu(menuList, 0L);
             // 获取路由列表
             List<RouterVo> routers = SecurityUtils.generateRouter(menuList, 0L);
-            // 获取权限列表
+            // 生成权限列表
             String authority = SecurityUtils.generateAuthorityByKey(menuList);
 
             response.setStatus(HttpStatus.OK.value());
@@ -69,13 +69,13 @@ public class UserController {
         return Result.Error().setMessage("获取用户信息失败");
     }
 
-    @GetMapping("/getUserList/{key}")
-    public Result getUserList(@PathVariable String key) {
-        List<User> userList = userService.selectUserList(key);
-        if (!ObjectUtils.isEmpty(userList)) {
-            return Result.Success(userList).setMessage("获取数据成功");
-        }
-        return Result.Error().setMessage("获取数据失败");
-    }
+//    @GetMapping("/getUserList/{key}")
+//    public Result getUserList(@PathVariable String key) {
+//        List<User> userList = userService.selectUserList(key);
+//        if (!ObjectUtils.isEmpty(userList)) {
+//            return Result.Success(userList).setMessage("获取数据成功");
+//        }
+//        return Result.Error().setMessage("获取数据失败");
+//    }
 
 }

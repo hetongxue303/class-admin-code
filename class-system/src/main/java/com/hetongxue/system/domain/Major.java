@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 角色实体
+ * 专业实体
  *
  * @author 何同学
  */
@@ -18,28 +18,24 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName("sys_role")
-public class Role implements Serializable {
+@TableName("sys_major")
+public class Major implements Serializable {
 
     /**
-     * 角色ID
+     * 专业ID
      */
     @TableId(type = IdType.AUTO)
-    private Long roleId;
+    private Long mId;
     /**
-     * 角色名称
+     * 专业名称
      */
-    private String roleName;
+    private String name;
     /**
-     * 角色key值
+     * 专业描述
      */
-    private String roleKey;
+    private String remark;
     /**
-     * 帐号状态(0:正常 1:停用)
-     */
-    private boolean status;
-    /**
-     * 删除标志(0:存在 1:已删除)
+     * 删除状态
      */
     private boolean delFlag;
     /**

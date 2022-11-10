@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户实体
+ * 账户实体
  *
  * @author 何同学
  */
@@ -18,67 +18,51 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName("sys_user")
-public class User implements Serializable {
+@TableName("sys_account")
+public class Account implements Serializable {
 
     /**
-     * 用户ID
+     * 账户ID
      */
     @TableId(type = IdType.AUTO)
-    private Long userId;
+    private Long accountId;
     /**
-     * 学院ID
+     * 账户名
      */
-    private Long cId;
+    private String username;
     /**
-     * 专业ID
+     * 账户密码
      */
-    private Long mId;
+    private String password;
     /**
-     * 学号/工号
+     * 最后登录IP
      */
-    private Long userNo;
+    private String lastLoginIp;
     /**
-     * 用户昵称
+     * 最后登录时间
      */
-    private String nickName;
+    private String lastLoginTime;
     /**
-     * 真实姓名
-     */
-    private String realName;
-    /**
-     * 用户邮箱
-     */
-    private String email;
-    /**
-     * 用户电话
-     */
-    private String phone;
-    /**
-     * 用户性别(0:男 1:女 2:保密)
-     */
-    private String gender;
-    /**
-     * 头像地址
-     */
-    private String avatar;
-    /**
-     * 帐号状态(0:正常 1:停用)
+     * 账户状态
      */
     private boolean status;
     /**
-     * 删除标志(0:存在 1:已删除)
+     * 删除状态
      */
     private boolean delFlag;
     /**
-     * 备注
+     * 创建人
      */
-    private String remark;
+    private String createBy;
     /**
      * 创建时间
      */
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
+    /**
+     * 更新人
+     */
+    private String updateBy;
     /**
      * 更新时间
      */

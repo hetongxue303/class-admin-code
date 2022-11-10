@@ -4,7 +4,8 @@ import com.hetongxue.base.constant.Base;
 import com.hetongxue.configuration.redis.RedisUtils;
 import com.hetongxue.configuration.security.exception.JwtAuthenticationException;
 import com.hetongxue.configuration.security.utils.SecurityUtils;
-import com.hetongxue.system.domain.User;
+import com.hetongxue.system.domain.Account;
+import com.hetongxue.system.service.AccountService;
 import com.hetongxue.system.service.MenuService;
 import com.hetongxue.system.service.RoleService;
 import com.hetongxue.system.service.UserService;
@@ -45,6 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private RoleService roleService;
     @Resource
     private MenuService menuService;
+    @Resource
+    private AccountService accountService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
@@ -55,7 +58,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        System.out.println("经过JWT过滤器");
         // 2.解析token信息
         Claims claims = jwtUtils.parseToken(token);
         // 2.1 校验token是否就合法
@@ -72,17 +74,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throw new JwtAuthenticationException("token不存在");
         }
         // 3.获取id和subject
-        Long id = Long.valueOf(claims.getId());
+        Long accountID = Long.valueOf(claims.getId());
         String username = claims.getSubject();
-        User user = userService.selectOneByUsername(username);
-        if (!user.getUserId().equals(id)) {
+        Account account = accountService.selectOneByUsername(username);
+        if (!account.getAccountId().equals(accountID)) {
             throw new JwtAuthenticationException("token异常");
         }
         // 4.获取权限列表
-        String authority = SecurityUtils.generateAuthority(roleService.selectRoleByUserId(user.getUserId()), menuService.selectMenuByUserId(user.getUserId()));
+        String authority = SecurityUtils.generateAuthority(roleService.selectRoleByAccountId(account.getAccountId()), menuService.selectMenuListByAccountID(account.getAccountId()));
         List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(authority);
         // 5.封装Authentication
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, authorityList);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(account, null, authorityList);
         // 6.存入SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         filterChain.doFilter(request, response);

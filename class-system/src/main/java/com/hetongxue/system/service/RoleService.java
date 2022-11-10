@@ -13,8 +13,8 @@ import java.util.List;
 public interface RoleService extends IService<Role> {
 
     /**
-     * 根据用户ID获取角色列表
+     * 根据账户ID获取角色列表
      */
-    List<Role> selectRoleByUserId(Long userId);
+    List<Role> selectRoleByAccountId(Long accountID);
 
 }

@@ -15,6 +15,6 @@ public interface MenuService extends IService<Menu> {
     /**
      * 根据用户ID获取权限列表
      */
-    List<Menu> selectMenuByUserId(Long userId);
+    List<Menu> selectMenuListByAccountID(Long accountID);
 
 }

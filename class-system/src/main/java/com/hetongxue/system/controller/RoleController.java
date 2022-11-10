@@ -26,7 +26,7 @@ public class RoleController {
 
     @GetMapping("/getRoles")
     public Result getRoles() {
-        List<Role> roles = roleService.selectRoleByUserId(SecurityUtils.getUser().getUserId());
+        List<Role> roles = roleService.selectRoleByAccountId(SecurityUtils.getAccount().getAccountId());
         if (!ObjectUtils.isEmpty(roles)) {
             return Result.Success(roles).setMessage("获取角色信息成功");
         }

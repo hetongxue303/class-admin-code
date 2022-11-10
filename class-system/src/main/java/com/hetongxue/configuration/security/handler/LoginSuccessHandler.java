@@ -4,10 +4,10 @@ import cn.hutool.core.map.MapUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hetongxue.base.constant.Base;
 import com.hetongxue.base.response.Result;
-import com.hetongxue.configuration.security.entity.LoginUser;
-import com.hetongxue.system.domain.User;
-import com.hetongxue.utils.JwtUtils;
 import com.hetongxue.configuration.redis.RedisUtils;
+import com.hetongxue.configuration.security.entity.LoginInfo;
+import com.hetongxue.system.domain.Account;
+import com.hetongxue.utils.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -48,17 +48,16 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 设置状态
         response.setStatus(HttpStatus.OK.value());
         // 获取当前用户信息
-        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
-        User user = loginUser.getUser();
+        LoginInfo loginInfo = (LoginInfo) authentication.getPrincipal();
+        Account account = loginInfo.getAccount();
         // 生成token
-        String token = jwtUtils.generateToken(user.getUserId(), user.getUsername());
+        String token = jwtUtils.generateToken(account.getAccountId(), account.getUsername());
         // 将token存于redis中(默认3天)
         redisUtils.setValue(Base.AUTHORIZATION_KEY, token, TIMEOUT, TIMEUNIT);
 //        // 将token设置在请求头上
 //        response.setHeader(Base.AUTHORIZATION_KEY, token);
         // 自定义返回内容
-        response.getWriter().println(new ObjectMapper().writeValueAsString(Result.Success(MapUtil.builder().put(
-                "token",token).build()).setMessage("登陆成功")));
+        response.getWriter().println(new ObjectMapper().writeValueAsString(Result.Success(MapUtil.builder().put("token", token).build()).setMessage("登陆成功")));
     }
 
 }

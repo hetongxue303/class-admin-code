@@ -24,8 +24,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     private MenuMapper menuMapper;
 
     @Override
-    public List<Menu> selectMenuByUserId(Long userId) {
-        return menuMapper.selectList(new QueryWrapper<Menu>().inSql("menu_id", "select menu_id from " + "sys_role_menu where role_id in " + "(select distinct role_id from sys_user_role where user_id = " + userId + ")").orderByAsc("sort"));
+    public List<Menu> selectMenuListByAccountID(Long accountID) {
+        return menuMapper.selectList(new QueryWrapper<Menu>().inSql("menu_id", "select menu_id from sys_role_menu where role_id in (select role_id from sys_account_role where account_id = " + accountID + ")").orderByAsc("sort"));
     }
 
 }

@@ -1,10 +1,10 @@
 package com.hetongxue.system.service.impl;
 
-import com.hetongxue.configuration.security.entity.LoginUser;
-import com.hetongxue.system.domain.User;
+import com.hetongxue.configuration.security.entity.LoginInfo;
+import com.hetongxue.system.domain.Account;
+import com.hetongxue.system.service.AccountService;
 import com.hetongxue.system.service.MenuService;
 import com.hetongxue.system.service.RoleService;
-import com.hetongxue.system.service.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,7 +22,7 @@ import java.util.Objects;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
-    private UserService userService;
+    private AccountService accountService;
     @Resource
     private RoleService roleService;
     @Resource
@@ -30,9 +30,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // 获取用户信息
-        User user = userService.selectOneByUsername(username);
-        if (Objects.isNull(user)) {
+        // 获取账户信息
+        Account account = accountService.selectOneByUsername(username);
+        if (Objects.isNull(account)) {
             throw new UsernameNotFoundException("用户名或密码错误");
         }
 
@@ -48,7 +48,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 生成路由列表
 //        List<RouterVo> routers = SecurityUtils.generateRouter(menuList, 0L);
 
-        return new LoginUser(user, null);
+        return new LoginInfo(account, null);
     }
 
 }

@@ -75,11 +75,15 @@ public class Menu implements Serializable {
      */
     private String perKey;
     /**
+     * 是否删除(1是 0否)
+     */
+    private boolean delFlag;
+    /**
      * 备注
      */
     private String remark;
     /**
-     * 创建者
+     * 创建人
      */
     private String createBy;
     /**
@@ -88,7 +92,7 @@ public class Menu implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     /**
-     * 更新者
+     * 更新人
      */
     private String updateBy;
     /**

@@ -1,14 +1,16 @@
 package com.hetongxue.configuration.security.utils;
 
+import com.hetongxue.system.domain.Account;
 import com.hetongxue.system.domain.Menu;
 import com.hetongxue.system.domain.Role;
-import com.hetongxue.system.domain.User;
 import com.hetongxue.system.domain.vo.MenuVo;
 import com.hetongxue.system.domain.vo.RouterVo;
+import com.hetongxue.system.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,6 +23,9 @@ import java.util.stream.Collectors;
  * @author 何同学
  */
 public class SecurityUtils {
+
+    @Resource
+    private UserService userService;
 
     /**
      * 目录key
@@ -129,11 +134,12 @@ public class SecurityUtils {
     }
 
     /**
-     * 虎丘用户信息
+     * 获取账户信息
      *
-     * @return com.hetongxue.system.domain.User
+     * @return com.hetongxue.system.domain.Account
      */
-    public static User getUser() {
-        return (User) getSecurityContextHolder().getPrincipal();
+    public static Account getAccount() {
+        return (Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
 }

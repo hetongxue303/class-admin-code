@@ -5,8 +5,6 @@ import com.hetongxue.system.domain.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.util.List;
-
 /**
  * 用户Mapper
  *
@@ -14,6 +12,13 @@ import java.util.List;
  */
 public interface UserMapper extends BaseMapper<User> {
 
-    @Select("select user_id from sys_user_role where role_id in(SELECT role_id FROM sys_role where role_key = #{key})")
-    List<Long> getUsersId(@Param("key") String role_key);
+    /**
+     * 通过账户ID获取用户信息
+     *
+     * @param accountID 账户ID
+     * @return com.hetongxue.system.domain.User
+     */
+    @Select("select * from sys_user where user_id in (select user_id from sys_account_user where account_id = #{accountID})")
+    User getUserByAccountID(@Param("accountID") Long accountID);
+
 }
