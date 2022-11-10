@@ -3,6 +3,7 @@ package com.hetongxue;
 import com.hetongxue.system.mapper.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.Resource;
 
@@ -26,6 +27,8 @@ public class TestApplication {
     private MajorMapper majorMapper;
     @Resource
     private AccountMapper accountMapper;
+    @Resource
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Test
     void test() {
@@ -35,6 +38,7 @@ public class TestApplication {
         System.out.println("collegeMapper.selectList(null) = " + collegeMapper.selectList(null));
         System.out.println("majorMapper.selectList(null) = " + majorMapper.selectList(null));
         System.out.println("accountMapper.selectList(null) = " + accountMapper.selectList(null));
+        System.out.println("passwordEncoder.encode(\"74ce4a21f159e81638334cbe243cd2cf\") = " + passwordEncoder.encode("74ce4a21f159e81638334cbe243cd2cf"));
     }
 
 }

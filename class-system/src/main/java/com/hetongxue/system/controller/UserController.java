@@ -46,6 +46,7 @@ public class UserController {
      */
     @GetMapping("/getUserInfo")
     public Result getUserInfo() {
+        System.out.println("到获取用户方法....");
         // 获取用户信息
         Long accountId = SecurityUtils.getAccount().getAccountId();
         User user = userService.selectOneByAccountID(accountId);
