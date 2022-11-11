@@ -17,6 +17,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.annotation.Resource;
@@ -61,7 +62,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 2.解析token信息
         Claims claims = jwtUtils.parseToken(token);
         // 2.1 校验token是否就合法
-        if (Objects.isNull(claims)) {
+        if (ObjectUtils.isEmpty(claims)) {
             throw new JwtAuthenticationException("token不合法");
         }
         // 2.2 校验token是否过期
