@@ -38,7 +38,7 @@ public class TestApplication {
         System.out.println("collegeMapper.selectList(null) = " + collegeMapper.selectList(null));
         System.out.println("majorMapper.selectList(null) = " + majorMapper.selectList(null));
         System.out.println("accountMapper.selectList(null) = " + accountMapper.selectList(null));
-        System.out.println("passwordEncoder.encode(\"74ce4a21f159e81638334cbe243cd2cf\") = " + passwordEncoder.encode("74ce4a21f159e81638334cbe243cd2cf"));
+        System.out.println("passwordEncoder：" + passwordEncoder.encode("74ce4a21f159e81638334cbe243cd2cf"));
     }
 
 }

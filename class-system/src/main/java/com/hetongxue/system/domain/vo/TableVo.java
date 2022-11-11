@@ -1,6 +1,7 @@
-package com.hetongxue.system.domain;
+package com.hetongxue.system.domain.vo;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.hetongxue.system.domain.College;
+import com.hetongxue.system.domain.Major;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * 用户实体
+ * 表格VO
  *
  * @author 何同学
  */
@@ -18,28 +19,26 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName("sys_user")
-public class User implements Serializable {
+public class TableVo implements Serializable {
 
     /**
      * 用户ID
      */
-    @TableId(type = IdType.AUTO)
     private Long userId;
     /**
-     * 学院ID
+     * 学院信息
      */
-    private Long cId;
+    private College college;
     /**
-     * 专业ID
+     * 专业信息
      */
-    private Long mId;
+    private Major major;
     /**
      * 角色ID
      */
     private Long roleId;
     /**
-     * 学号/工号
+     * 学号
      */
     private Long userNo;
     /**
@@ -79,22 +78,12 @@ public class User implements Serializable {
      */
     private String remark;
     /**
-     * 最后登录IP
-     */
-    private String lastLoginIp;
-    /**
-     * 最后登录时间
-     */
-    private String lastLoginTime;
-    /**
      * 创建时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
     /**
      * 更新时间
      */
-    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
 }

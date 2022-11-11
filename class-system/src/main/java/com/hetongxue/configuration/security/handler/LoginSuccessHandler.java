@@ -53,7 +53,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         String token = jwtUtils.generateToken(account.getAccountId(), account.getUsername());
         // 将token存于redis中(默认3天)
         redisUtils.setValue(Base.AUTHORIZATION_KEY, token, TIMEOUT, TIMEUNIT);
-//        // 将token设置在请求头上
+       // 将token设置在请求头上
 //        response.setHeader(Base.AUTHORIZATION_KEY, token);
         // 自定义返回内容
         response.getWriter().println(new ObjectMapper().writeValueAsString(Result.Success(MapUtil.builder().put("token", token).build()).setMessage("登陆成功")));

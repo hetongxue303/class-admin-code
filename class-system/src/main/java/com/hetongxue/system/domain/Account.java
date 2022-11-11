@@ -35,14 +35,6 @@ public class Account implements Serializable {
      */
     private String password;
     /**
-     * 最后登录IP
-     */
-    private String lastLoginIp;
-    /**
-     * 最后登录时间
-     */
-    private String lastLoginTime;
-    /**
      * 账户状态
      */
     private boolean status;
