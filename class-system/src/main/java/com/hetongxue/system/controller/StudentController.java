@@ -35,7 +35,7 @@ public class StudentController {
         return !ObjectUtils.isEmpty(studentList) ? Result.Success(studentList).setMessage("获取学生列表成功") : Result.Error().setMessage("获取学生列表失败");
     }
 
-    @GetMapping("/page/list")
+    @PostMapping("/page/list")
     public Result getStudentListPage(@RequestBody PageQuery query) {
         System.out.println("query = " + query);
         Page<User> studentListPage = studentService.getStudentListPage(query);
