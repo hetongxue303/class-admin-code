@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.hetongxue.base.constant.Base;
+import com.hetongxue.base.constant.Constant;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,13 +32,13 @@ public class MyBatisPlusConfiguration implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.setFieldValByName(Base.CREATE_TIME_KEY, new Date(), metaObject);
-        this.setFieldValByName(Base.UPDATE_TIME_KEY, new Date(), metaObject);
+        this.setFieldValByName(Constant.CREATE_TIME_KEY, new Date(), metaObject);
+        this.setFieldValByName(Constant.UPDATE_TIME_KEY, new Date(), metaObject);
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName(Base.UPDATE_TIME_KEY, new Date(), metaObject);
+        this.setFieldValByName(Constant.UPDATE_TIME_KEY, new Date(), metaObject);
     }
 
 }

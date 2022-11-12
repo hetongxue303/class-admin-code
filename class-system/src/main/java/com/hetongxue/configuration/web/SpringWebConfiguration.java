@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hetongxue.base.constant.Base;
+import com.hetongxue.base.constant.Constant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -58,7 +58,7 @@ public class SpringWebConfiguration implements WebMvcConfigurer {
                 .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE", "TRACE", "HEAD", "PATCH")// 放行哪些请求方式
                 .allowCredentials(true)// 是否发送 Cookie
                 .maxAge(3600L)// 最大时间
-                .exposedHeaders(Base.AUTHORIZATION_KEY).allowedOriginPatterns("*");
+                .exposedHeaders(Constant.SECURITY_AUTHORIZATION).allowedOriginPatterns("*");
     }
 
 

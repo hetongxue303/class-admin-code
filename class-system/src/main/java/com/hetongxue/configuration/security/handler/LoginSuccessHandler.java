@@ -1,12 +1,12 @@
 package com.hetongxue.configuration.security.handler;
 
-import cn.hutool.core.map.MapUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hetongxue.base.constant.Base;
+import com.hetongxue.base.constant.Constant;
 import com.hetongxue.base.response.Result;
 import com.hetongxue.configuration.redis.RedisUtils;
 import com.hetongxue.configuration.security.entity.LoginInfo;
 import com.hetongxue.system.domain.Account;
+import com.hetongxue.system.domain.vo.TokenVo;
 import com.hetongxue.utils.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -31,11 +31,16 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     /**
      * 存储时间
      */
-    private static final long TIMEOUT = 7;
+    private static final long TIMEOUT = Constant.REDIS_TIMEOUT;
     /**
      * 存储单位
      */
-    private static final TimeUnit TIMEUNIT = TimeUnit.DAYS;
+    private static final TimeUnit TIMEUNIT = Constant.REDIS_TIMEUNIT;
+    /**
+     * token key
+     */
+    private static final String AUTHORIZATION = Constant.SECURITY_AUTHORIZATION;
+
     @Resource
     private JwtUtils jwtUtils;
     @Resource
@@ -52,11 +57,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 生成token
         String token = jwtUtils.generateToken(account.getAccountId(), account.getUsername());
         // 将token存于redis中(默认3天)
-        redisUtils.setValue(Base.AUTHORIZATION_KEY, token, TIMEOUT, TIMEUNIT);
-       // 将token设置在请求头上
+        redisUtils.setValue(AUTHORIZATION, token, TIMEOUT, TIMEUNIT);
+        // 将token设置在请求头上
 //        response.setHeader(Base.AUTHORIZATION_KEY, token);
         // 自定义返回内容
-        response.getWriter().println(new ObjectMapper().writeValueAsString(Result.Success(MapUtil.builder().put("token", token).build()).setMessage("登陆成功")));
+        response.getWriter().println(new ObjectMapper().writeValueAsString(Result.Success(new TokenVo(Constant.TOKEN_EXPIRATION_TIME, token)).setMessage("登陆成功")));
     }
 
 }

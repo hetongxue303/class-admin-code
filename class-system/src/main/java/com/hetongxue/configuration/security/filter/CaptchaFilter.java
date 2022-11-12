@@ -1,6 +1,6 @@
 package com.hetongxue.configuration.security.filter;
 
-import com.hetongxue.base.constant.Base;
+import com.hetongxue.base.constant.Constant;
 import com.hetongxue.configuration.redis.RedisUtils;
 import com.hetongxue.configuration.security.SpringSecurityConfiguration;
 import com.hetongxue.configuration.security.exception.CaptchaAuthenticationException;
@@ -45,18 +45,18 @@ public class CaptchaFilter extends OncePerRequestFilter {
             // 判断是否为登录URL和POST请求
             if (Objects.equals(request.getRequestURI(), LOGIN_PATH) && LOGIN_METHOD.equalsIgnoreCase(request.getMethod())) {
                 String code = request.getParameter(CAPTCHA_KEY);
-                String redisCode = (String) redisUtils.getValue(Base.CAPTCHA_KEY);
+                String redisCode = (String) redisUtils.getValue(Constant.SECURITY_CAPTCHA);
                 // 验证码不一致：抛出异常
                 if (!Objects.equals(code, redisCode)) {
                     throw new CaptchaAuthenticationException("验证码错误");
                 }
                 // 验证码一致：删除redis中的验证码并放行
-                redisUtils.delete(Base.CAPTCHA_KEY);
+                redisUtils.delete(Constant.SECURITY_CAPTCHA);
                 filterChain.doFilter(request, response);
             }
         } catch (CaptchaAuthenticationException e) {
             // 删除redis中的验证码并放行
-            redisUtils.delete(Base.CAPTCHA_KEY);
+            redisUtils.delete(Constant.SECURITY_CAPTCHA);
             // 执行验证失败处理类
             loginFailureHandler.onAuthenticationFailure(request, response, e);
         }

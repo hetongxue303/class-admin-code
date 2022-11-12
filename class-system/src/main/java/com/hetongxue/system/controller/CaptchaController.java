@@ -1,6 +1,6 @@
 package com.hetongxue.system.controller;
 
-import com.hetongxue.base.constant.Base;
+import com.hetongxue.base.constant.Constant;
 import com.hetongxue.base.response.Result;
 import com.hetongxue.configuration.redis.RedisUtils;
 import com.wf.captcha.ArithmeticCaptcha;
@@ -50,7 +50,7 @@ public class CaptchaController {
         System.setProperty("nashorn.args", "--no-deprecation-warning");
         ArithmeticCaptcha captcha = new ArithmeticCaptcha(WIDTH, HEIGHT, LENGTH);
         // 设置60秒过期
-        redisUtils.setValue(Base.CAPTCHA_KEY, captcha.text(), TIME, TIMEUNIT);
+        redisUtils.setValue(Constant.SECURITY_CAPTCHA, captcha.text(), TIME, TIMEUNIT);
         return Result.Success(captcha.toBase64());
     }
 

@@ -28,6 +28,8 @@ public class JacksonConfiguration {
 
     /**
      * 适配自定义序列化和反序列化策略
+     *
+     * @return org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer
      */
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
@@ -71,8 +73,7 @@ public class JacksonConfiguration {
     }
 
     /**
-     * 序列化
-     * LocalDateTime序列化为毫秒级时间戳
+     * 序列化LocalDateTime序列化为毫秒级时间戳
      */
     public static class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
         @Override

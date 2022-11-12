@@ -1,6 +1,6 @@
 package com.hetongxue.configuration.security.filter;
 
-import com.hetongxue.base.constant.Base;
+import com.hetongxue.base.constant.Constant;
 import com.hetongxue.configuration.redis.RedisUtils;
 import com.hetongxue.configuration.security.exception.JwtAuthenticationException;
 import com.hetongxue.configuration.security.utils.SecurityUtils;
@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
         // 1.获取token信息
-        String token = request.getHeader(Base.AUTHORIZATION_KEY);
+        String token = request.getHeader(Constant.SECURITY_AUTHORIZATION);
         // 1.1 判断token是否存在 不存在则直接继续过滤链并返回
         if (Objects.isNull(token)) {
             filterChain.doFilter(request, response);
@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throw new JwtAuthenticationException("token不合法");
         }
         // 2.2 校验token是否过期
-        String redisToken = String.valueOf(redisUtils.getValue(Base.AUTHORIZATION_KEY));
+        String redisToken = String.valueOf(redisUtils.getValue(Constant.SECURITY_AUTHORIZATION));
         if (Objects.isNull(redisToken) || jwtUtils.isExpired(claims)) {
             throw new JwtAuthenticationException("token已过期");
         }

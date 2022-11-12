@@ -1,7 +1,7 @@
 package com.hetongxue.configuration.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hetongxue.base.constant.Base;
+import com.hetongxue.base.constant.Constant;
 import com.hetongxue.base.response.Result;
 import com.hetongxue.configuration.redis.RedisUtils;
 import org.springframework.http.HttpStatus;
@@ -39,9 +39,9 @@ public class UserLogoutSuccessHandler implements LogoutSuccessHandler {
         // 设置响应状态
         response.setStatus(HttpStatus.OK.value());
         // 设置响应头token信息为空
-        response.setHeader(Base.AUTHORIZATION_KEY, "");
+        response.setHeader(Constant.SECURITY_AUTHORIZATION, "");
         // 清空redis中的token信息
-        redisUtils.delete(Base.AUTHORIZATION_KEY);
+        redisUtils.delete(Constant.SECURITY_AUTHORIZATION);
         response.getWriter().println(new ObjectMapper().writeValueAsString(Result.Success().setMessage("注销成功")));
     }
 
