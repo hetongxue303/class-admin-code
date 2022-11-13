@@ -18,7 +18,7 @@ import java.util.Objects;
 public class JwtUtils {
 
     /**
-     * 过期时间(单位：ms) 默认3天
+     * 过期时间(单位:毫秒)
      */
     private static final long EXPIRATION_TIME = Constant.TOKEN_EXPIRATION_TIME;
     /**
@@ -35,6 +35,7 @@ public class JwtUtils {
      */
     private static final String PREFIX = Constant.TOKEN_PREFIX;
 
+    
     /**
      * 生成JWT
      *
@@ -65,7 +66,7 @@ public class JwtUtils {
      * @param token tokan值
      * @return io.jsonwebtoken.Claims
      */
-    public Claims parseToken(String token) {
+    public Claims getClaims(String token) {
         try {
             if (Constant.TOKEN_IS_PREFIX) {
                 return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.substring(PREFIX.length())).getBody();
@@ -79,18 +80,63 @@ public class JwtUtils {
     /**
      * 是否存在token
      */
-    public boolean isToken(String token) {
+    public boolean isNull(String token) {
         if (Constant.TOKEN_IS_PREFIX) {
-            return Objects.isNull(Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.substring(PREFIX.length(), token.length())).getBody());
+            return Objects.isNull(Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.substring(PREFIX.length())).getBody());
         }
         return Objects.isNull(Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody());
     }
 
     /**
-     * 判断jwt是否过期
+     * 刷新token
+     *
+     * @param token
+     * @return java.lang.String
      */
-    public boolean isExpired(Claims claims) {
-        return claims.getExpiration().before(new Date());
+    public String refreshToken(String token) {
+        try {
+            return generateToken(getTokenId(token), getTokenUsername(token));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取用户名
+     *
+     * @param token token
+     * @return java.lang.String
+     */
+    public String getTokenUsername(String token) {
+        try {
+            return getClaims(token).getSubject();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 获取ID
+     *
+     * @param token
+     * @return java.lang.Long
+     */
+    public Long getTokenId(String token) {
+        try {
+            return Long.valueOf(getClaims(token).getId());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 判断是否过期
+     *
+     * @param token
+     * @return boolean
+     */
+    public boolean isExpired(String token) {
+        return getClaims(token).getExpiration().before(new Date());
     }
 
 }

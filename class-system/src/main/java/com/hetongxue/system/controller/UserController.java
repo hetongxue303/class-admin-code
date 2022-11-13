@@ -5,7 +5,6 @@ import com.hetongxue.base.response.Result;
 import com.hetongxue.configuration.redis.RedisUtils;
 import com.hetongxue.configuration.security.exception.JwtAuthenticationException;
 import com.hetongxue.configuration.security.utils.SecurityUtils;
-import com.hetongxue.system.domain.Account;
 import com.hetongxue.system.domain.Menu;
 import com.hetongxue.system.domain.Role;
 import com.hetongxue.system.domain.User;
@@ -17,9 +16,7 @@ import com.hetongxue.system.service.MenuService;
 import com.hetongxue.system.service.RoleService;
 import com.hetongxue.system.service.UserService;
 import com.hetongxue.utils.JwtUtils;
-import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -85,24 +82,18 @@ public class UserController {
     }
 
     @PostMapping("/refreshToken")
-    public Result refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public Result refreshToken(HttpServletRequest request) {
         try {
-            // 拿到token
             String token = request.getHeader(Constant.SECURITY_AUTHORIZATION);
             if (ObjectUtils.isEmpty(token)) {
                 throw new JwtAuthenticationException("token异常");
             }
-            // 校验token合法性
-            Claims claims = jwtUtils.parseToken(token);
-            if (ObjectUtils.isEmpty(claims)) {
+            if (ObjectUtils.isEmpty(jwtUtils.getClaims(token))) {
                 throw new JwtAuthenticationException("token异常");
             }
-            Account account = ((Account) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-            String newToken = jwtUtils.generateToken(account.getAccountId(), account.getUsername());
-            // 删除之前redis中的token
+            String newToken = jwtUtils.refreshToken(token);
             redisUtils.delete(Constant.SECURITY_AUTHORIZATION);
             redisUtils.setValue(Constant.SECURITY_AUTHORIZATION, newToken, Constant.REDIS_TIMEOUT, Constant.REDIS_TIMEUNIT);
-            response.setHeader(Constant.SECURITY_AUTHORIZATION, newToken);
             return Result.Success(new TokenVo(Constant.TOKEN_EXPIRATION_TIME, newToken)).setMessage("刷新token成功！");
         } catch (JwtAuthenticationException e) {
             return Result.Error().setMessage("刷新token失败,请重新登录！");

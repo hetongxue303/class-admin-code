@@ -10,7 +10,6 @@ import com.hetongxue.system.service.MenuService;
 import com.hetongxue.system.service.RoleService;
 import com.hetongxue.system.service.UserService;
 import com.hetongxue.utils.JwtUtils;
-import io.jsonwebtoken.Claims;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -52,41 +51,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
-        // 1.获取token信息
         String token = request.getHeader(Constant.SECURITY_AUTHORIZATION);
-        // 1.1 判断token是否存在 不存在则直接继续过滤链并返回
         if (Objects.isNull(token)) {
             filterChain.doFilter(request, response);
             return;
         }
-        // 2.解析token信息
-        Claims claims = jwtUtils.parseToken(token);
-        // 2.1 校验token是否就合法
-        if (ObjectUtils.isEmpty(claims)) {
-            throw new JwtAuthenticationException("token不合法");
-        }
-        // 2.2 校验token是否过期
-        String redisToken = String.valueOf(redisUtils.getValue(Constant.SECURITY_AUTHORIZATION));
-        if (Objects.isNull(redisToken) || jwtUtils.isExpired(claims)) {
-            throw new JwtAuthenticationException("token已过期");
-        }
-        // 2.3 校验用户token与redis中的token是否一致
-        if (!Objects.equals(token, redisToken)) {
-            throw new JwtAuthenticationException("token不存在");
-        }
-        // 3.获取id和subject
-        Long accountID = Long.valueOf(claims.getId());
-        String username = claims.getSubject();
-        Account account = accountService.selectOneByUsername(username);
-        if (!account.getAccountId().equals(accountID)) {
+        // 校验token是否存在
+        if (ObjectUtils.isEmpty(jwtUtils.getClaims(token))) {
             throw new JwtAuthenticationException("token异常");
         }
-        // 4.获取权限列表
+        // 校验token是否过期
+        String redisToken = String.valueOf(redisUtils.getValue(Constant.SECURITY_AUTHORIZATION));
+        if (Objects.isNull(redisToken) || jwtUtils.isExpired(token)) {
+            throw new JwtAuthenticationException("token过期");
+        }
+        // 校验用户token与redis中的token是否一致
+        if (!Objects.equals(token, redisToken)) {
+            throw new JwtAuthenticationException("token不一致");
+        }
+        // 验证合法性
+        Account account = accountService.selectOneByUsername(jwtUtils.getTokenUsername(token));
+        if (!account.getAccountId().equals(jwtUtils.getTokenId(token))) {
+            throw new JwtAuthenticationException("token不合法");
+        }
+        // 获取权限列表
         String authority = SecurityUtils.generateAuthority(roleService.selectRoleByAccountId(account.getAccountId()), menuService.selectMenuListByAccountID(account.getAccountId()));
         List<GrantedAuthority> authorityList = AuthorityUtils.commaSeparatedStringToAuthorityList(authority);
-        // 5.封装Authentication
+        // 封装Authentication
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(account, null, authorityList);
-        // 6.存入SecurityContextHolder
+        // 存入SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         filterChain.doFilter(request, response);
     }

@@ -21,7 +21,7 @@ public class TokenVo implements Serializable {
     /**
      * 过期时间
      */
-    private long expire_time;
+    private long expireTime;
     /**
      * token值
      */
